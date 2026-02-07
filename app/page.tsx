@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef } from 'react'
 import { supabase } from '../lib/supabase' 
-import { Send, Hash, User, Sparkles, Tent } from 'lucide-react'
+import { Send, PenTool, Sparkles, Pin } from 'lucide-react'
 import { formatDistanceToNow } from 'date-fns'
 import { vi } from 'date-fns/locale'
 
@@ -12,16 +12,16 @@ type GuestbookEntry = {
   name: string
   message: string
   class_name: string
-  bg_color: string 
+  rotation: number // Góc nghiêng ngẫu nhiên cho tự nhiên
 }
 
-// Màu Pastel nhẹ nhàng cho background các thẻ note
-const NOTE_COLORS = [
-  'bg-orange-50 border-orange-200 text-orange-900',
-  'bg-yellow-50 border-yellow-200 text-yellow-900',
-  'bg-rose-50 border-rose-200 text-rose-900',
-  'bg-blue-50 border-blue-200 text-blue-900',
-  'bg-emerald-50 border-emerald-200 text-emerald-900',
+// Màu giấy note pastel (Vàng nhạt, Xanh mint, Hồng phấn...)
+const PAPER_COLORS = [
+  'bg-[#fff7d1] shadow-yellow-200/50', // Vàng
+  'bg-[#e2f0cb] shadow-green-200/50',  // Xanh lá mạ
+  'bg-[#ffdee1] shadow-pink-200/50',   // Hồng
+  'bg-[#d4f0f0] shadow-cyan-200/50',   // Xanh ngọc
+  'bg-[#f0e6ff] shadow-purple-200/50', // Tím
 ]
 
 export default function Home() {
@@ -35,15 +35,26 @@ export default function Home() {
         .from('guestbook')
         .select('*')
         .order('created_at', { ascending: false })
-      if (data) setEntries(data)
+      
+      if (data) {
+        // Thêm góc xoay ngẫu nhiên cho mỗi note khi tải về
+        const dataWithRotation = data.map((item: any) => ({
+          ...item,
+          rotation: Math.random() * 4 - 2 // Xoay nhẹ từ -2 đến 2 độ
+        }))
+        setEntries(dataWithRotation)
+      }
     }
     fetchEntries()
 
     const channel = supabase
       .channel('realtime-guestbook')
       .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'guestbook' }, (payload) => {
-        const newMsg = payload.new as any
-        setEntries((prev) => [newMsg as GuestbookEntry, ...prev])
+        const newMsg = {
+            ...payload.new,
+            rotation: Math.random() * 4 - 2 
+        } as GuestbookEntry
+        setEntries((prev) => [newMsg, ...prev])
       })
       .subscribe()
 
@@ -57,111 +68,129 @@ export default function Home() {
     const name = formData.get('name') as string
     const message = formData.get('message') as string
     const class_name = formData.get('class_name') as string
-    const randomColor = NOTE_COLORS[Math.floor(Math.random() * NOTE_COLORS.length)]
 
     if (!name || !message) return
 
-    await supabase.from('guestbook').insert([
-      { name, message, class_name, bg_color: randomColor }
-    ])
+    await supabase.from('guestbook').insert([{ name, message, class_name }])
     formRef.current?.reset()
     setLoading(false)
   }
 
   return (
-    <main className="min-h-screen bg-[#FDFBF7] text-slate-800 font-sans">
-      {/* Header rực rỡ */}
-      <div className="bg-gradient-to-r from-orange-400 to-rose-500 py-12 px-4 shadow-lg mb-10 text-center relative overflow-hidden">
-         <div className="absolute top-0 left-0 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
-         <div className="relative z-10">
-            <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm px-4 py-1 rounded-full text-white text-sm font-bold mb-4 border border-white/30 shadow-sm">
-              <Tent size={16} /> TRẠI XUÂN 2026
-            </div>
-            <h1 className="text-4xl md:text-6xl font-extrabold text-white drop-shadow-md tracking-tight">
-              LƯU BÚT LIÊN QUÂN TIN
-            </h1>
-            <p className="text-orange-50 mt-2 font-medium">Gửi gắm kỷ niệm, lưu giữ thanh xuân</p>
-         </div>
+    <main className="min-h-screen bg-[#FDFCF0] text-[#4a4a4a] pb-20 overflow-x-hidden">
+      {/* Hiệu ứng nền giấy k kẻ ngang (CSS Grid) */}
+      <div className="fixed inset-0 pointer-events-none opacity-[0.03] z-0" 
+           style={{ backgroundImage: 'linear-gradient(#000 1px, transparent 1px)', backgroundSize: '100% 2rem' }}>
       </div>
 
-      <div className="max-w-4xl mx-auto px-4 pb-20">
+      {/* HEADER: Phong cách bảng phấn hoặc tiêu đề báo */}
+      <div className="relative pt-16 pb-12 text-center z-10">
+        <div className="inline-block relative">
+             <h1 className="font-serif text-4xl md:text-6xl font-bold text-[#2c3e50] tracking-tight relative z-10">
+                Lưu Bút Trại Xuân
+             </h1>
+             {/* Nét gạch chân nguệch ngoạc */}
+             <svg className="absolute -bottom-2 w-full h-3 text-orange-300 -z-10" viewBox="0 0 100 10" preserveAspectRatio="none">
+               <path d="M0 5 Q 50 10 100 5" stroke="currentColor" strokeWidth="8" fill="none" opacity="0.6" />
+             </svg>
+        </div>
+        <p className="mt-4 font-hand text-xl md:text-2xl text-[#7f8c8d]">
+          "Vietnam mới Tin Tin Tin Tin..."
+        </p>
+      </div>
+
+      <div className="max-w-5xl mx-auto px-4 relative z-10">
         
-        {/* Form nhập liệu kiểu Card nổi */}
-        <div className="bg-white rounded-3xl p-6 shadow-xl border border-orange-100 mb-12 transform hover:-translate-y-1 transition-all duration-300">
-          <form ref={formRef} onSubmit={handleSubmit} className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="relative md:col-span-2">
-                <User className="absolute left-3 top-3 text-orange-300 w-5 h-5" />
+        {/* FORM NHẬP: Giao diện phong bì thư */}
+        <div className="bg-white max-w-2xl mx-auto p-1 rounded-sm shadow-xl transform rotate-1 border border-gray-200 mb-16 relative">
+          {/* Tem thư */}
+          <div className="absolute -top-3 -right-3 bg-red-100 text-red-800 p-2 rounded shadow-sm transform rotate-12 border border-red-200">
+             <span className="font-serif text-xs font-bold">2026</span>
+          </div>
+
+          <div className="border-2 border-dashed border-gray-300 p-6 md:p-8 bg-white">
+            <h3 className="font-hand text-2xl mb-4 text-[#2c3e50] flex items-center gap-2">
+              <PenTool size={20} /> Viết đôi dòng kỷ niệm...
+            </h3>
+            
+            <form ref={formRef} onSubmit={handleSubmit} className="space-y-4 font-serif">
+              <div className="flex gap-4">
                 <input 
                   name="name" 
-                  placeholder="Tên cậu là gì?" 
-                  className="w-full bg-orange-50/50 pl-10 pr-4 py-3 rounded-xl border border-orange-100 focus:border-orange-400 focus:ring-2 focus:ring-orange-200 outline-none transition-all placeholder:text-orange-300/70"
+                  placeholder="Tên cậu là..." 
+                  className="flex-1 bg-transparent border-b-2 border-gray-200 focus:border-orange-400 outline-none py-2 px-1 transition-colors placeholder:font-hand placeholder:text-lg"
                   required
                 />
-              </div>
-              <div className="relative">
-                <Hash className="absolute left-3 top-3 text-orange-300 w-5 h-5" />
                 <input 
                   name="class_name" 
                   placeholder="Lớp..." 
-                  className="w-full bg-orange-50/50 pl-10 pr-4 py-3 rounded-xl border border-orange-100 focus:border-orange-400 focus:ring-2 focus:ring-orange-200 outline-none transition-all placeholder:text-orange-300/70"
+                  className="w-1/3 bg-transparent border-b-2 border-gray-200 focus:border-orange-400 outline-none py-2 px-1 transition-colors placeholder:font-hand placeholder:text-lg"
                 />
               </div>
-            </div>
-            
-            <textarea 
-              name="message" 
-              placeholder="Viết vài dòng kỷ niệm vào đây nhé..." 
-              rows={3}
-              className="w-full bg-orange-50/50 p-4 rounded-xl border border-orange-100 focus:border-orange-400 focus:ring-2 focus:ring-orange-200 outline-none transition-all placeholder:text-orange-300/70 resize-none"
-              required
-            />
+              
+              <div className="relative">
+                <textarea 
+                  name="message" 
+                  placeholder="Nhắn nhủ tới Liên Quân Tin..." 
+                  rows={3}
+                  className="w-full bg-[url('https://www.transparenttextures.com/patterns/notebook.png')] bg-[#fafafa] border border-gray-200 rounded p-4 outline-none focus:ring-2 focus:ring-orange-200 resize-none font-hand text-xl leading-8"
+                  required
+                />
+              </div>
 
-            <button 
-              disabled={loading}
-              className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 rounded-xl shadow-lg shadow-orange-200 transition-all flex items-center justify-center gap-2 active:scale-95"
-            >
-              {loading ? 'Đang gửi...' : <><Send size={18} /> Gửi ngay</>}
-            </button>
-          </form>
+              <button 
+                disabled={loading}
+                className="w-full bg-[#2c3e50] hover:bg-[#34495e] text-white font-bold py-3 rounded shadow-lg transition-all flex items-center justify-center gap-2 font-sans uppercase tracking-wider text-sm"
+              >
+                {loading ? 'Đang dán tem...' : <><Send size={16} /> Gửi Lưu Bút</>}
+              </button>
+            </form>
+          </div>
         </div>
 
-        {/* Danh sách Masonry Cards */}
-        <div className="columns-1 md:columns-2 gap-6 space-y-6">
-          {entries.map((item) => (
+        {/* LIST CARD: Masonry Layout */}
+        <div className="columns-1 md:columns-2 lg:columns-3 gap-6 space-y-8 px-2">
+          {entries.map((item, index) => (
             <div 
               key={item.id} 
-              className={`break-inside-avoid ${item.bg_color || 'bg-white border-slate-100'} p-5 rounded-2xl shadow-sm hover:shadow-md border transform hover:-translate-y-1 transition-all duration-300 relative`}
+              className={`break-inside-avoid relative p-6 shadow-md transition-transform hover:scale-105 duration-300 ${PAPER_COLORS[index % PAPER_COLORS.length]}`}
+              style={{ transform: `rotate(${item.rotation}deg)` }} // Xoay ngẫu nhiên
             >
-              {/* Ghim giấy note */}
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-4 h-12 bg-orange-200/50 rotate-3 rounded-sm backdrop-blur-sm z-10 opacity-50"></div>
-              
-              <p className="font-medium text-lg mb-4 mt-2 leading-relaxed opacity-90 font-handwriting">
-                "{item.message}"
+              {/* Hiệu ứng băng dính Washi Tape */}
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-8 bg-white/40 backdrop-blur-sm shadow-sm rotate-1 skew-x-12 opacity-80"></div>
+
+              {/* Ghim (chỉ hiện ở một số cái) */}
+              {index % 3 === 0 && (
+                 <Pin className="absolute -top-4 -right-2 text-red-400 drop-shadow-md transform -rotate-12" size={24} fill="currentColor" />
+              )}
+
+              <p className="font-hand text-2xl text-[#2c3e50] leading-relaxed mb-4 whitespace-pre-wrap">
+                {item.message}
               </p>
               
-              <div className="flex justify-between items-center pt-3 border-t border-black/5">
-                <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 bg-white/50 rounded-full flex items-center justify-center text-sm font-bold shadow-sm">
-                        {item.name.charAt(0).toUpperCase()}
+              <div className="flex justify-between items-end border-t border-black/10 pt-3 mt-2">
+                <div>
+                    <div className="font-serif font-bold text-[#2c3e50] text-sm">
+                        {item.name}
                     </div>
-                    <div>
-                        <h4 className="font-bold text-sm">{item.name}</h4>
-                        {item.class_name && <span className="text-xs opacity-60 uppercase">{item.class_name}</span>}
-                    </div>
+                    {item.class_name && (
+                        <div className="font-sans text-[10px] uppercase tracking-widest text-gray-500 mt-0.5">
+                            {item.class_name}
+                        </div>
+                    )}
                 </div>
-                <span className="text-[10px] opacity-50 font-mono">
+                <span className="font-hand text-sm text-gray-500">
                   {formatDistanceToNow(new Date(item.created_at), { addSuffix: true, locale: vi })}
                 </span>
               </div>
             </div>
           ))}
         </div>
-        
+
         {entries.length === 0 && (
-            <div className="text-center py-20 opacity-50">
-                <Sparkles className="mx-auto mb-2 text-orange-300" size={40}/>
-                <p className="text-slate-400">Trang giấy trắng chưa có mực...</p>
+            <div className="text-center py-20 opacity-40">
+                <Sparkles className="mx-auto mb-4 text-gray-400" size={48}/>
+                <p className="font-hand text-2xl">Trang lưu bút đang chờ dòng mực đầu tiên...</p>
             </div>
         )}
       </div>

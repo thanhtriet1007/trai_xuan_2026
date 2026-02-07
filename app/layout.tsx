@@ -1,8 +1,5 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
-import './globals.css' // 👈 DÒNG QUAN TRỌNG NHẤT: Nạp CSS vào web
-
-const inter = Inter({ subsets: ['latin'] })
+import './globals.css' // Chỉ cần dòng này là đủ
 
 export const metadata: Metadata = {
   title: 'Lưu Bút Trại Xuân 2026',
@@ -16,7 +13,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="vi">
-      <body className={inter.className}>{children}</body>
+      <body className="bg-[#FDFCF0]">{children}</body>
     </html>
   )
 }

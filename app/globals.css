@@ -1,11 +1,17 @@
+/* 1. NHẬP FONT (BẮT BUỘC PHẢI Ở DÒNG ĐẦU TIÊN) */
+@import url('https://fonts.googleapis.com/css2?family=Mali:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300&display=swap');
+
+/* 2. SAU ĐÓ MỚI ĐẾN TAILWIND */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* 3. CẤU HÌNH GIAO DIỆN */
 :root {
-  --foreground-rgb: 255, 255, 255;
-  --background-start-rgb: 15, 23, 42;
-  --background-end-rgb: 0, 0, 0;
+  --foreground-rgb: 80, 80, 80;
+  --background-start-rgb: 253, 252, 240;
+  --background-end-rgb: 253, 252, 240;
 }
 
 body {
@@ -16,22 +22,17 @@ body {
       rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb));
-  min-height: 100vh;
+  font-family: 'Merriweather', serif; /* Font mặc định là Merriweather */
 }
 
-/* Tạo hiệu ứng nền lưới Cyberpunk */
-.bg-grid-pattern {
-  background-image: linear-gradient(to right, #334155 1px, transparent 1px),
-    linear-gradient(to bottom, #334155 1px, transparent 1px);
-  background-size: 40px 40px;
-  mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
-  opacity: 0.2;
+/* Class riêng ép dùng font viết tay */
+.font-hand {
+  font-family: 'Mali', cursive !important;
 }
 
-/* Hiệu ứng kính mờ (Glassmorphism) */
-.glass-panel {
-  background: rgba(30, 41, 59, 0.7);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+/* Hiệu ứng nền giấy cũ */
+.bg-paper-pattern {
+  background-color: #FDFCF0;
+  background-image: linear-gradient(#e5e5e5 1px, transparent 1px);
+  background-size: 100% 2rem;
 }
