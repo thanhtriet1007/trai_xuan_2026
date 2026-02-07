@@ -1,38 +1,26 @@
-/* 1. NHẬP FONT (BẮT BUỘC PHẢI Ở DÒNG ĐẦU TIÊN) */
-@import url('https://fonts.googleapis.com/css2?family=Mali:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300&display=swap');
+@import "tailwindcss";
 
-/* 2. SAU ĐÓ MỚI ĐẾN TAILWIND */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-/* 3. CẤU HÌNH GIAO DIỆN */
 :root {
-  --foreground-rgb: 80, 80, 80;
-  --background-start-rgb: 253, 252, 240;
-  --background-end-rgb: 253, 252, 240;
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
-  font-family: 'Merriweather', serif; /* Font mặc định là Merriweather */
-}
-
-/* Class riêng ép dùng font viết tay */
-.font-hand {
-  font-family: 'Mali', cursive !important;
-}
-
-/* Hiệu ứng nền giấy cũ */
-.bg-paper-pattern {
-  background-color: #FDFCF0;
-  background-image: linear-gradient(#e5e5e5 1px, transparent 1px);
-  background-size: 100% 2rem;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
 }

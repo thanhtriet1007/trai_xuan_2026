@@ -11,11 +11,12 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      // 👇 THÊM ĐOẠN NÀY ĐỂ KÍCH HOẠT FONT VIẾT TAY
       fontFamily: {
-        // Gọi thẳng tên font vừa import bên kia
-        hand: ['"Mali"', 'cursive'], 
-        serif: ['"Merriweather"', 'serif'],
+        hand: ['var(--font-hand)'], 
+        serif: ['var(--font-serif)'],
       },
+      // ---------------------------------------------
     },
   },
   plugins: [],
