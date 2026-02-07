@@ -97,6 +97,9 @@ export default function Home() {
         <p className="mt-4 font-hand text-xl md:text-2xl text-[#7f8c8d]">
           "Vietnam mới Tin Tin Tin Tin..."
         </p>
+        <p className="mt-4 font-hand text-xl md:text-2xl text-[#7f8c8d]">
+          "Trie yêu Cà Rốt nhất nhé"
+        </p>
       </div>
 
       <div className="max-w-5xl mx-auto px-4 relative z-10">
