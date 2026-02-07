@@ -11,12 +11,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
-      // 👇 THÊM ĐOẠN NÀY ĐỂ KÍCH HOẠT FONT VIẾT TAY
       fontFamily: {
         hand: ['var(--font-hand)'], 
-        serif: ['var(--font-serif)'],
       },
-      // ---------------------------------------------
     },
   },
   plugins: [],
