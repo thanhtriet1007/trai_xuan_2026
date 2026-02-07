@@ -1,36 +1,53 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🏕️ Digital Guestbook - Trại Xuân 2026 (Spring Camp 2026)
 
-## Getting Started
+A real-time digital guestbook built for the **Information Technology Alliance (Liên Quân Tin)** at Spring Camp 2026. This application allows students to leave digital memories, wishes, and notes in a nostalgic, interactive "sticky note" interface.
 
-First, run the development server:
+🚀 **Live Demo:** https://trai-xuan-2026.vercel.app/
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+---
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## ✨ Key Features
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+* **⚡ Real-time Updates:** Powered by **Supabase Realtime**, new messages appear instantly on all connected devices without refreshing the page.
+* **🎨 Nostalgic UI/UX:** Designed with a "School Memory" vibe using:
+    * **Handwriting Fonts:** Integrated *Mali* and *Merriweather* via Google Fonts.
+    * **Paper Textures:** Custom CSS patterns mimicking notebook paper.
+    * **Randomized Design:** Note cards have random colors, rotation angles, and tape effects for a natural look.
+* **📱 Responsive Masonry Layout:** A Pinterest-style layout that adapts perfectly from mobile screens (1 column) to desktops (3 columns).
+* **🚀 Optimized Performance:** Built with **Next.js 14 App Router** for server-side rendering and fast initial load.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## 🛠️ Tech Stack
 
-To learn more about Next.js, take a look at the following resources:
+This project uses modern web technologies focusing on performance and developer experience:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+* **Frontend:** [Next.js 14](https://nextjs.org/) (App Router), [React](https://react.dev/), [TypeScript](https://www.typescriptlang.org/)
+* **Styling:** [Tailwind CSS](https://tailwindcss.com/) (with custom configuration for fonts & animations)
+* **Backend & Database:** [Supabase](https://supabase.com/) (PostgreSQL)
+* **Icons:** [Lucide React](https://lucide.dev/)
+* **Deployment:** [Vercel](https://vercel.com/)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## 📸 Screenshots
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+<img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/7288e976-5a2a-4756-ae2a-d9e670cf4d93" />
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## 💡 Technical Highlights (What I Learned)
+
+During the development of this project, I tackled several technical challenges:
+
+1.  **Handling Real-time Data Subscription:**
+    Implemented `useEffect` hooks to subscribe to Supabase's `postgres_changes` events, ensuring the UI state stays synchronized with the database in milliseconds.
+
+2.  **Custom Tailwind Configuration:**
+    Extended the default Tailwind theme to support custom font variables (`var(--font-hand)`) and created utility classes for the "glassmorphism" and paper texture effects.
+
+3.  **Dynamic UI Generation:**
+    Applied mathematical logic to generate random rotation angles (`-2deg` to `2deg`) and background colors for each note card while maintaining visual consistency.
+
+---
+
