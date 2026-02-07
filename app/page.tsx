@@ -12,16 +12,16 @@ type GuestbookEntry = {
   name: string
   message: string
   class_name: string
-  rotation: number // Góc nghiêng ngẫu nhiên cho tự nhiên
+  rotation: number 
 }
 
-// Màu giấy note pastel (Vàng nhạt, Xanh mint, Hồng phấn...)
+
 const PAPER_COLORS = [
-  'bg-[#fff7d1] shadow-yellow-200/50', // Vàng
-  'bg-[#e2f0cb] shadow-green-200/50',  // Xanh lá mạ
-  'bg-[#ffdee1] shadow-pink-200/50',   // Hồng
-  'bg-[#d4f0f0] shadow-cyan-200/50',   // Xanh ngọc
-  'bg-[#f0e6ff] shadow-purple-200/50', // Tím
+  'bg-[#fff7d1] shadow-yellow-200/50',
+  'bg-[#e2f0cb] shadow-green-200/50', 
+  'bg-[#ffdee1] shadow-pink-200/50', 
+  'bg-[#d4f0f0] shadow-cyan-200/50',   
+  'bg-[#f0e6ff] shadow-purple-200/50', 
 ]
 
 export default function Home() {
@@ -37,10 +37,10 @@ export default function Home() {
         .order('created_at', { ascending: false })
       
       if (data) {
-        // Thêm góc xoay ngẫu nhiên cho mỗi note khi tải về
+       
         const dataWithRotation = data.map((item: any) => ({
           ...item,
-          rotation: Math.random() * 4 - 2 // Xoay nhẹ từ -2 đến 2 độ
+          rotation: Math.random() * 4 - 2 
         }))
         setEntries(dataWithRotation)
       }
@@ -78,18 +78,18 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-[#FDFCF0] text-[#4a4a4a] pb-20 overflow-x-hidden">
-      {/* Hiệu ứng nền giấy k kẻ ngang (CSS Grid) */}
+      {}
       <div className="fixed inset-0 pointer-events-none opacity-[0.03] z-0" 
            style={{ backgroundImage: 'linear-gradient(#000 1px, transparent 1px)', backgroundSize: '100% 2rem' }}>
       </div>
 
-      {/* HEADER: Phong cách bảng phấn hoặc tiêu đề báo */}
+      {}
       <div className="relative pt-16 pb-12 text-center z-10">
         <div className="inline-block relative">
              <h1 className="font-serif text-4xl md:text-6xl font-bold text-[#2c3e50] tracking-tight relative z-10">
                 Lưu Bút Trại Xuân
              </h1>
-             {/* Nét gạch chân nguệch ngoạc */}
+             {}
              <svg className="absolute -bottom-2 w-full h-3 text-orange-300 -z-10" viewBox="0 0 100 10" preserveAspectRatio="none">
                <path d="M0 5 Q 50 10 100 5" stroke="currentColor" strokeWidth="8" fill="none" opacity="0.6" />
              </svg>
@@ -104,9 +104,9 @@ export default function Home() {
 
       <div className="max-w-5xl mx-auto px-4 relative z-10">
         
-        {/* FORM NHẬP: Giao diện phong bì thư */}
+        {}
         <div className="bg-white max-w-2xl mx-auto p-1 rounded-sm shadow-xl transform rotate-1 border border-gray-200 mb-16 relative">
-          {/* Tem thư */}
+          {}
           <div className="absolute -top-3 -right-3 bg-red-100 text-red-800 p-2 rounded shadow-sm transform rotate-12 border border-red-200">
              <span className="font-serif text-xs font-bold">2026</span>
           </div>
@@ -151,18 +151,18 @@ export default function Home() {
           </div>
         </div>
 
-        {/* LIST CARD: Masonry Layout */}
+        {}
         <div className="columns-1 md:columns-2 lg:columns-3 gap-6 space-y-8 px-2">
           {entries.map((item, index) => (
             <div 
               key={item.id} 
               className={`break-inside-avoid relative p-6 shadow-md transition-transform hover:scale-105 duration-300 ${PAPER_COLORS[index % PAPER_COLORS.length]}`}
-              style={{ transform: `rotate(${item.rotation}deg)` }} // Xoay ngẫu nhiên
+              style={{ transform: `rotate(${item.rotation}deg)` }} 
             >
-              {/* Hiệu ứng băng dính Washi Tape */}
+              {}
               <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-8 bg-white/40 backdrop-blur-sm shadow-sm rotate-1 skew-x-12 opacity-80"></div>
 
-              {/* Ghim (chỉ hiện ở một số cái) */}
+              {}
               {index % 3 === 0 && (
                  <Pin className="absolute -top-4 -right-2 text-red-400 drop-shadow-md transform -rotate-12" size={24} fill="currentColor" />
               )}

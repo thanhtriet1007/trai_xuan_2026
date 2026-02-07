@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Inter, Mali } from 'next/font/google' // Import font Mali
+import { Inter, Mali } from 'next/font/google'
 import './globals.css'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
@@ -7,7 +7,7 @@ const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 const mali = Mali({ 
   weight: ['400', '500', '600', '700'], 
   subsets: ['vietnamese'],
-  variable: '--font-hand' // 👈 QUAN TRỌNG: Tên biến phải là --font-hand
+  variable: '--font-hand'
 })
 
 export const metadata: Metadata = {
@@ -21,7 +21,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="vi">
-      {/* 👇 Phải nạp biến mali.variable vào body thì cả web mới hiểu */}
+      {}
       <body className={`${inter.variable} ${mali.variable} font-sans bg-[#FDFCF0]`}>
         {children}
       </body>
