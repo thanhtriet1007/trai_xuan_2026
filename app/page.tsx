@@ -5,6 +5,7 @@ import { supabase } from '@/lib/supabase'
 import { Send, Hash, User, Code2, Sparkles } from 'lucide-react'
 import { formatDistanceToNow } from 'date-fns'
 import { vi } from 'date-fns/locale'
+import "./globals.css";
 
 type GuestbookEntry = {
   id: string
