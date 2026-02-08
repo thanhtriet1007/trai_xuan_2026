@@ -27,6 +27,7 @@ const PAPER_COLORS = [
 export default function Home() {
   const [entries, setEntries] = useState<GuestbookEntry[]>([])
   const [loading, setLoading] = useState(false)
+  const [viewAll, setViewAll] = useState(false)
   const formRef = useRef<HTMLFormElement>(null)
 
   useEffect(() => {
@@ -102,7 +103,18 @@ export default function Home() {
         </p>
       </div>
 
-      <div className="max-w-5xl mx-auto px-4 relative z-10">
+      <div className={viewAll ? "w-full px-4 relative z-10" : "max-w-5xl mx-auto px-4 relative z-10"}>
+        
+        {}
+        <div className="text-center mb-6">
+          <button
+            onClick={() => setViewAll(!viewAll)}
+            className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-400 to-orange-500 hover:from-orange-500 hover:to-orange-600 text-white font-bold py-2 px-6 rounded-full shadow-lg transition-all transform hover:scale-105"
+          >
+            <Sparkles size={18} />
+            {viewAll ? 'Xem Bình Thường' : 'Xem Tất Cả'}
+          </button>
+        </div>
         
         {}
         <div className="bg-white max-w-2xl mx-auto p-1 rounded-sm shadow-xl transform rotate-1 border border-gray-200 mb-16 relative">
@@ -152,39 +164,46 @@ export default function Home() {
         </div>
 
         {}
-        <div className="columns-1 md:columns-2 lg:columns-3 gap-6 space-y-8 px-2">
+        <div className={viewAll ? "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-3 px-2" : "columns-1 md:columns-2 lg:columns-3 gap-6 space-y-8 px-2"}>
           {entries.map((item, index) => (
             <div 
               key={item.id} 
-              className={`break-inside-avoid relative p-6 shadow-md transition-transform hover:scale-105 duration-300 ${PAPER_COLORS[index % PAPER_COLORS.length]}`}
-              style={{ transform: `rotate(${item.rotation}deg)` }} 
+              className={viewAll 
+                ? `break-inside-avoid relative p-5 shadow-sm rounded border border-gray-200 max-h-96 overflow-y-auto ${PAPER_COLORS[index % PAPER_COLORS.length]}`
+                : `break-inside-avoid relative p-6 shadow-md transition-transform hover:scale-105 duration-300 ${PAPER_COLORS[index % PAPER_COLORS.length]}`
+              }
+              style={viewAll ? {} : { transform: `rotate(${item.rotation}deg)` }}
             >
               {}
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-8 bg-white/40 backdrop-blur-sm shadow-sm rotate-1 skew-x-12 opacity-80"></div>
+              {!viewAll && (
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-8 bg-white/40 backdrop-blur-sm shadow-sm rotate-1 skew-x-12 opacity-80"></div>
+              )}
 
               {}
-              {index % 3 === 0 && (
+              {!viewAll && index % 3 === 0 && (
                  <Pin className="absolute -top-4 -right-2 text-red-400 drop-shadow-md transform -rotate-12" size={24} fill="currentColor" />
               )}
 
-              <p className="font-hand text-2xl text-[#2c3e50] leading-relaxed mb-4 whitespace-pre-wrap">
+              <p className={viewAll ? "font-hand text-sm text-[#2c3e50] leading-relaxed mb-3 whitespace-pre-wrap" : "font-hand text-2xl text-[#2c3e50] leading-relaxed mb-4 whitespace-pre-wrap"}>
                 {item.message}
               </p>
               
-              <div className="flex justify-between items-end border-t border-black/10 pt-3 mt-2">
+              <div className={viewAll ? "flex flex-col gap-1 border-t border-black/10 pt-2 mt-2" : "flex justify-between items-end border-t border-black/10 pt-3 mt-2"}>
                 <div>
-                    <div className="font-serif font-bold text-[#2c3e50] text-sm">
+                    <div className={viewAll ? "font-serif font-bold text-[#2c3e50] text-xs" : "font-serif font-bold text-[#2c3e50] text-sm"}>
                         {item.name}
                     </div>
                     {item.class_name && (
-                        <div className="font-sans text-[10px] uppercase tracking-widest text-gray-500 mt-0.5">
+                        <div className={viewAll ? "font-sans text-[8px] uppercase tracking-widest text-gray-500 mt-0.5" : "font-sans text-[10px] uppercase tracking-widest text-gray-500 mt-0.5"}>
                             {item.class_name}
                         </div>
                     )}
                 </div>
-                <span className="font-hand text-sm text-gray-500">
-                  {formatDistanceToNow(new Date(item.created_at), { addSuffix: true, locale: vi })}
-                </span>
+                {!viewAll && (
+                  <span className="font-hand text-sm text-gray-500">
+                    {formatDistanceToNow(new Date(item.created_at), { addSuffix: true, locale: vi })}
+                  </span>
+                )}
               </div>
             </div>
           ))}
